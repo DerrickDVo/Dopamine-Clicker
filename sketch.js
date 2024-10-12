@@ -341,13 +341,16 @@ this is going to be fucking retarded.
 function mouseReleased() {
   inputPosition.x = mouseX;
   inputPosition.y = mouseY;
-  print(inputPosition);
+  //print(inputPosition);
   isClicked = true;
 }
 
 function touchEnded() {
   //print(touches.x + touches.y);
   //print(touches);
+  inputPosition.x = touches.x;
+  inputPosition.y = touches.y;
+  isClicked = true;
 }
 
 
