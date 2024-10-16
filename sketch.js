@@ -107,7 +107,7 @@ function draw() {
 
   if (gameState == 3) {
   }
-  //game state 0
+ //game state 0
   if (gameState == 0) {
     push();
 
@@ -124,6 +124,7 @@ function draw() {
     scale(2);
     translate(0, 0, -100);
     rotateY(frameCount * 0.009);
+    
     model(DopeModel);
 
     pop();
@@ -131,10 +132,7 @@ function draw() {
     //scale(0.5);
 
     //checks if answer is right
-    if (NewProblem) {
-      mathFact();
-      NewProblem = false;
-    }
+    
     if (Correct == true) {
       dopamine += multiplier;
       Correct = false;
@@ -159,10 +157,10 @@ function draw() {
     fill(255);
 
     //collision boxes
-    rect(-200, 0, 160, 120);
-    rect(40, 0, 160, 120);
-    rect(-200, 150, 160, 120);
-    rect(40, 150, 160, 120);
+    // rect(-200, 0, 160, 120);
+    // rect(40, 0, 160, 120);
+    // rect(-200, 150, 160, 120);
+    // rect(40, 150, 160, 120);
 
     fill(0);
 
@@ -175,6 +173,20 @@ function draw() {
     //checks for mouse collision on multiple choice
     //uses the p5.collide2d library https://github.com/bmoren/p5.collide2D
 
+  if (runClick == false) {
+      BackColorB = 0;
+      BackColorG = 0;
+     
+      waitTime += 1;
+      if (waitTime >= 180) {
+        runClick = true;
+      }
+      print("Running!!!!");
+    }
+  if (runClick == true) {
+    BackColorB = 255;
+    BackColorG = 255;
+      
     Box0 = collidePointRect(
       inputPosition.x,
       inputPosition.y,
@@ -207,7 +219,16 @@ function draw() {
       165,
       125
     );
-  }
+    checkClick();
+ 
+    
+  }  
+   if (NewProblem) {
+      mathFact();
+      NewProblem = false;
+    } 
+   print(runClick);
+  print(waitTime);}
   //draws upgrade menu elements
   if (gameState == 1) {
     //draws dopamine model
