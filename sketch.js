@@ -40,6 +40,8 @@ var secondAngle = 128;
 var inputPosition;
 let details;
 var isClicked = false;
+var runClick = true;
+var waitTime = 0;
 
 function preload() {
   DopeModel = loadModel("681-bas-color-print_NIH3D.stl", true);
@@ -60,7 +62,7 @@ function windowResized() {
 }
 
 function draw() {
-  background(255, 255, 255);
+  background(255, BackColorG, BackColorB);
  //checkClick();
   push();
   textAlign(CENTER);
@@ -107,7 +109,7 @@ function draw() {
 
   if (gameState == 3) {
   }
- //game state 0
+  //game state 0
   if (gameState == 0) {
     push();
 
@@ -301,6 +303,7 @@ function draw() {
 
     //checks for button collision
 
+
     Box0 = collidePointCircle(
       inputPosition.x,
       inputPosition.y,
@@ -329,6 +332,7 @@ function draw() {
       windowHeight / 2 + 120,
       130
     );
+    checkClick();
   }
 
   //collision debug
@@ -348,12 +352,13 @@ function draw() {
   //     " " +
   //     windowHeight
   // );
-  checkClick();
+  
 }
 
 /* input translator function!
 
-instead of trying to rework all of the collsion, itll be easier to just translate input from either input into 2 numbers that can be used for button collision checks.
+instead of trying to rework all of the collsion, 
+it'll be easier to just translate input from either input into 2 numbers that can be used for button collision checks.
 This should let touchscreen devices interact, which means this retarded program will just barely function.
 
 this is going to be fucking retarded.
@@ -362,16 +367,16 @@ this is going to be fucking retarded.
 function mouseReleased() {
   inputPosition.x = mouseX;
   inputPosition.y = mouseY;
-  //print(inputPosition);
+  print(inputPosition);
   isClicked = true;
 }
 
-function touchEnded() {
+function touchStarted() {
   //print(touches.x + touches.y);
-  //print(touches);
   inputPosition.x = touches.x;
   inputPosition.y = touches.y;
   isClicked = true;
+  print(touches);
 }
 
 
