@@ -444,6 +444,8 @@ function mathSolution() {
 
 function wrongAnswer() {
   GriddyPercent = 0;
+  waitTime = 0;
+  runClick = false;
 }
 
 function griddyMeter() {
