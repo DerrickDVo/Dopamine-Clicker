@@ -406,7 +406,7 @@ function mathFact() {
   // Multi[3] = 3;
   else {
     Multi[0] = round(random(0, 99));
-    if (Multi[0] == solution) {
+    while (Multi[0] == solution) {
       Multi[0] = round(random(0, 99));
     }
   }
@@ -414,7 +414,7 @@ function mathFact() {
     Multi[CorrectChoice] = solution;
   } else {
     Multi[1] = round(random(0, 99));
-    if (Multi[1] == solution) {
+    while (Multi[1] == solution) {
       Multi[1] = round(random(0, 99));
     }
   }
@@ -422,14 +422,14 @@ function mathFact() {
     Multi[CorrectChoice] = solution;
   } else {
     Multi[2] = round(random(0, 99));
-    if (Multi[2] == solution) {
+    while (Multi[2] == solution) {
       Multi[2] = round(random(0, 99));
     }
     if (CorrectChoice == 3) {
       Multi[CorrectChoice] = solution;
     } else {
       Multi[3] = round(random(0, 99));
-      if (Multi[3] == solution) {
+      while (Multi[3] == solution) {
         Multi[3] = round(random(0, 99));
       }
     }
