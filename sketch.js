@@ -72,6 +72,14 @@ function windowResized() {
 }
 
 function draw() {
+
+  storeItem('dopamineVal', dopamine);
+  storeItem('multiplier', multiplier);
+  storeItem('griddyPercent', GriddyPercent);
+  storeItem('griddyNumber', GriddyNumber);
+  storeItem('UpgradePrices', UpgradePrice);
+  storeItem('AutoDopa', AutoDopa);
+  
   background(255, BackColorG, BackColorB);
  //checkClick();
   push();
