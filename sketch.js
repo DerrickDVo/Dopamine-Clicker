@@ -48,7 +48,17 @@ function preload() {
   // loadFont('fonts\MartianMono-Thin.ttf');
   // GriddyVid = createVideo('Kimiko Audio LoopLowQ.mp4');
 }
-function setup() {
+function setup() {  
+  
+  
+  dopamine = getItem('dopamineVal');
+  multiplier = getItem('multiplier');
+  GriddyPercent = getItem('griddyPercent');
+  GriddyNumber = getItem('griddyNumber');
+  UpgradePrice = getItem('UpgradePrices');
+  AutoDopa = getItem('AutoDopa');
+
+  
   inputPosition = createVector(0, 0);
   fontMartianMono = loadFont("MartianMono-VariableFont_wdth,wght.ttf");
   createCanvas(windowWidth, windowHeight, WEBGL);
