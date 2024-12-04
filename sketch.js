@@ -1,6 +1,6 @@
 var solution, num1, num2, inp, button, div1, div2;
-let dopamine = 0;
-var multiplier = 1;
+let dopamine;
+let multiplier;
 var time = 0;
 var Solution;
 var Num1, Num2;
@@ -31,7 +31,7 @@ let Box3 = false;
 let DopeModel;
 var gameState = 0;
 var menuButton = false;
-var UpgradePrice = [25, 25, 0, 0];
+let UpgradePrice;
 var AutoDopa = 0;
 let Milliseconds = 0;
 var firstAngle = 0;
@@ -42,27 +42,45 @@ let details;
 var isClicked = false;
 var runClick = true;
 var waitTime = 0;
+let GriddySaveStuff;
+let isThereSave;
 
 function preload() {
   DopeModel = loadModel("681-bas-color-print_NIH3D.stl", true);
   // loadFont('fonts\MartianMono-Thin.ttf');
   // GriddyVid = createVideo('Kimiko Audio LoopLowQ.mp4');
 }
-function setup() {  
-  
-  
-  dopamine = getItem('dopamineVal');
-  multiplier = getItem('multiplier');
-  GriddyPercent = getItem('griddyPercent');
-  GriddyNumber = getItem('griddyNumber');
-  UpgradePrice = getItem('UpgradePrices');
-  AutoDopa = getItem('AutoDopa');
-
-  
+function setup() {
   inputPosition = createVector(0, 0);
   fontMartianMono = loadFont("MartianMono-VariableFont_wdth,wght.ttf");
   createCanvas(windowWidth, windowHeight, WEBGL);
   frameRate(60);
+print("isThereSave????" + isThereSave);
+if (getItem('isThereSave') == 20) {
+  print("I am loading data");
+  dopamine = getItem('dopamine');
+  GriddySaveStuff = [0,0,0];
+  GriddySaveStuff[1] = getItem('griddyPercent');
+  GriddySaveStuff[2] = getItem('griddyNumber');
+  multiplier = getItem('multiplier');
+  UpgradePrice = getItem('UpgradePrices');
+
+  // GriddySaveStuff[1] = GriddyPercent;
+  // GriddySaveStuff[2] = GriddyNumber;
+}
+else {
+
+  print("New Save :3:3:3:3:3");
+  dopamine = 0;
+  GriddySaveStuff = [0,0,20];
+  multiplier = 1;
+  UpgradePrice = [25, 25, 0, 0];
+
+
+
+}
+
+
 }
 
 function windowResized() {
@@ -72,14 +90,6 @@ function windowResized() {
 }
 
 function draw() {
-
-  storeItem('dopamineVal', dopamine);
-  storeItem('multiplier', multiplier);
-  storeItem('griddyPercent', GriddyPercent);
-  storeItem('griddyNumber', GriddyNumber);
-  storeItem('UpgradePrices', UpgradePrice);
-  storeItem('AutoDopa', AutoDopa);
-  
   background(255, BackColorG, BackColorB);
  //checkClick();
   push();
@@ -101,7 +111,15 @@ function draw() {
     rect(0, 350, 100, 40);
 
     pop();
-   // scale(
+
+    if (keyIsPressed === true) {
+      if (keyCode === ENTER) {
+        savingSystem();
+      }
+      if (keyCode === BACKSPACE) {
+        deleteSaves();
+      }
+    }
 
     menuButton = collidePointRect(
       inputPosition.x,
@@ -111,6 +129,11 @@ function draw() {
       100,
       40
     );
+   // print("griddypercent: " + GriddySaveStuff[1] + "\ngriddynumber: " + GriddySaveStuff[2]);
+    push();
+    textSize(8);
+    text("griddypercent: " + GriddySaveStuff[1] + "\ngriddynumber: " + GriddySaveStuff[2], 0, -400);
+    pop();
   }
   //print("\nMenu Button : " + menuButton);
 
@@ -132,7 +155,7 @@ function draw() {
     push();
 
     strokeWeight(7);
-    line(1 - GriddyPercent, -170, -1 + GriddyPercent, -170);
+    line(1 - GriddySaveStuff[1], -170, -1 + GriddySaveStuff[1], -170);
 
     pop();
 
@@ -141,10 +164,11 @@ function draw() {
 
     noStroke();
     normalMaterial();
-    scale(2);
+    scale(4);
     translate(0, 0, -100);
+   //rotateX(frameCount * 60);
     rotateY(frameCount * 0.009);
-    
+    //rotateZ(frameCount * 78);
     model(DopeModel);
 
     pop();
@@ -247,8 +271,9 @@ function draw() {
       mathFact();
       NewProblem = false;
     } 
-   print(runClick);
-  print(waitTime);}
+   //print(runClick);
+  //print(waitTime);
+}
   //draws upgrade menu elements
   if (gameState == 1) {
     //draws dopamine model
@@ -382,10 +407,33 @@ This should let touchscreen devices interact, which means this retarded program 
 this is going to be fucking retarded.
 */
 
+function savingSystem() {
+
+  isThereSave = 20;
+
+
+  storeItem('isThereSave', isThereSave);
+
+
+  storeItem('dopamine', dopamine);
+  storeItem('griddyPercent', GriddySaveStuff[1]);
+  storeItem('griddyNumber', GriddySaveStuff[2]);
+  storeItem('multiplier', multiplier);
+  storeItem('UpgradePrices', UpgradePrice);
+
+}
+
+function deleteSaves() {
+  clearStorage();
+
+
+}
+
+
 function mouseReleased() {
   inputPosition.x = mouseX;
   inputPosition.y = mouseY;
-  print(inputPosition);
+  //print(inputPosition);
   isClicked = true;
 }
 
@@ -394,7 +442,7 @@ function touchStarted() {
   inputPosition.x = touches.x;
   inputPosition.y = touches.y;
   isClicked = true;
-  print(touches);
+  //print(touches);
 }
 
 
@@ -406,53 +454,55 @@ function mathFact() {
   num1 = round(random(9));
   num2 = round(random(9));
   solution = num1 * num2;
-  fill(0);
-  stroke(0);
+  // fill(0);
+  // stroke(0);
   CorrectChoice = round(random(0, 3));
-  print(CorrectChoice);
+
+  print("Correct Answer: " + CorrectChoice);
 
   //Randomly chooses the correct choice and makes false answers for wrong choices.
   //This is stupid.
-
-  if (CorrectChoice == 0) {
-    Multi[CorrectChoice] = solution;
-  }
-
-  // Multi[0] = 0;
+// Multi[0] = 0;
   // Multi[1] = 1;
   // Multi[2] = 2;
   // Multi[3] = 3;
-  else {
+  if (CorrectChoice == 0) {
+    Multi[0] = solution;
+  } else {
     Multi[0] = round(random(0, 99));
     while (Multi[0] == solution) {
       Multi[0] = round(random(0, 99));
+      print("box 0 rerunning");
     }
   }
   if (CorrectChoice == 1) {
-    Multi[CorrectChoice] = solution;
+    Multi[1] = solution;
   } else {
     Multi[1] = round(random(0, 99));
-    while (Multi[1] == solution) {
+    while (Multi[1] == solution || Multi[1] == Multi[0]) {
       Multi[1] = round(random(0, 99));
+      print("box 1 rerunning");
     }
   }
   if (CorrectChoice == 2) {
-    Multi[CorrectChoice] = solution;
+    Multi[2] = solution;
   } else {
     Multi[2] = round(random(0, 99));
-    while (Multi[2] == solution) {
+    while (Multi[2] == solution || Multi[2] == Multi[0] || Multi[2] == Multi[1]) {
       Multi[2] = round(random(0, 99));
-    }
+      print("box 2 rerunning");
+    } }
     if (CorrectChoice == 3) {
-      Multi[CorrectChoice] = solution;
+      Multi[3] = solution;
     } else {
       Multi[3] = round(random(0, 99));
-      while (Multi[3] == solution) {
+      while (Multi[3] == solution || Multi[3] == Multi[0] || Multi[3] == Multi[1] || Multi[3] == Multi[2]) {
         Multi[3] = round(random(0, 99));
+        print("box 3 rerunning");
       }
     }
   }
-}
+
 
 function mathSolution() {
   if (inp.value() == solution) {
@@ -466,22 +516,28 @@ function mathSolution() {
 }
 
 function wrongAnswer() {
-  GriddyPercent = 0;
+  GriddySaveStuff[1] = 0;
   waitTime = 0;
   runClick = false;
 }
-
+ 
 function griddyMeter() {
-  GriddyPercent += GriddyNumber;
-  //print(    "Griddy Percent: " + GriddyPercent + "\n Griddy Number: " + GriddyNumber );
-  if (GriddyPercent >= 100) {
+  // GriddyPercent = GriddySaveStuff[1];
+  // GriddyNumber = GriddySaveStuff[2];
+  GriddySaveStuff[1] += GriddySaveStuff[2];
+  print(    "Griddy Percent: " + GriddySaveStuff[1] + "\n Griddy Number: " + GriddySaveStuff[2] );
+  // GriddySaveStuff[1] = GriddyPercent;
+  // GriddySaveStuff[2] = GriddyNumber;
+  if (GriddySaveStuff[1] >= 100) {
     griddyComplete();
   }
 }
 function griddyComplete() {
-  GriddyPercent = 0;
-  GriddyNumber = GriddyNumber * 0.75;
-  dopamine += 50 * multiplier;
+  GriddySaveStuff[1] = 0;
+  GriddySaveStuff[2] = GriddySaveStuff[2] * 0.75;
+  dopamine += 50 * (0.7 * multiplier);
+  // GriddySaveStuff[1] = GriddyPercent;
+  // GriddySaveStuff[2] = GriddyNumber;
 }
 
 function checkClick() {
