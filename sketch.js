@@ -46,6 +46,7 @@ let GriddySaveStuff;
 let isThereSave;
 let GlobalOp;
 let num1String, num2String;
+let difficulty = 1; // Initial difficulty level
 
 function preload() {
   DopeModel = loadModel("681-bas-color-print_NIH3D.stl", true);
@@ -458,82 +459,64 @@ function touchStarted() {
 function modelLoaded() {
   gameState = 0;
 }
+
+function increaseDifficulty() {
+  difficulty += 1; // Increase difficulty level
+  print("Difficulty increased to: " + difficulty);
+}
+
 function mathFact() {
   let Oper = round(random(3));
-  print (Oper + "is the operation");
+  print(Oper + " is the operation");
+
+  // Adjust the range of numbers based on difficulty
+  let maxNum = difficulty * 10;
+
   if (Oper == 0) {
-    num1 = round(random(9));
-    num2 = round(random(9));
+    num1 = round(random(maxNum**.5));
+    num2 = round(random(maxNum**.5));
     solution = num1 * num2;
-    GlobalOp = "x"
+    GlobalOp = "x";
   }
   if (Oper == 1) {
-    num2 = round(random(8)+1);
-    solution = round(random(9));
+    num2 = round(random(maxNum - 1)**.5 + 1);
+    solution = round(random(maxNum)**.5);
     num1 = num2 * solution;
-    GlobalOp = "/"
+    GlobalOp = "/";
   }
   if (Oper == 2) {
-    num1 = round(random(50));
-    num2 = round(random(50));
+    num1 = round(random(maxNum));
+    num2 = round(random(maxNum));
     solution = num1 + num2;
-    GlobalOp = "+"
+    GlobalOp = "+";
   }
   if (Oper == 3) {
-    num1 = round(random(99));
-    num2 = round(random(99));
-    if (num1 < num2){
-        num2 = [num1, num1 = num2][0];
+    num1 = round(random(maxNum));
+    num2 = round(random(maxNum));
+    if (num1 < num2) {
+      [num1, num2] = [num2, num1]; // Swap values
     }
     solution = num1 - num2;
-    GlobalOp = "-"
+    GlobalOp = "-";
   }
-
+  increaseDifficulty(); // Increase difficulty
   CorrectChoice = round(random(0, 3));
 
   print("Correct Answer: " + CorrectChoice);
-
-  //Randomly chooses the correct choice and makes false answers for wrong choices.
-  //This is stupid.
-  // Multi[0] = 0;
-  // Multi[1] = 1;
-  // Multi[2] = 2;
-  // Multi[3] = 3;
-  if (CorrectChoice == 0) {
-    Multi[0] = solution;
-  } else {
-    Multi[0] = round(random(0, 99));
-    while (Multi[0] == solution) {
-      Multi[0] = round(random(0, 99));
-      print("box 0 rerunning");
-    }
-  }
-  if (CorrectChoice == 1) {
-    Multi[1] = solution;
-  } else {
-    Multi[1] = round(random(0, 99));
-    while (Multi[1] == solution || Multi[1] == Multi[0]) {
-      Multi[1] = round(random(0, 99));
-      print("box 1 rerunning");
-    }
-  }
-  if (CorrectChoice == 2) {
-    Multi[2] = solution;
-  } else {
-    Multi[2] = round(random(0, 99));
-    while (Multi[2] == solution || Multi[2] == Multi[0] || Multi[2] == Multi[1]) {
-      Multi[2] = round(random(0, 99));
-      print("box 2 rerunning");
-    } }
-    if (CorrectChoice == 3) {
-      Multi[3] = solution;
+  
+  let range = 8;
+  // Generate false answers
+  for (let i = 0; i < 4; i++) {
+    if (i === CorrectChoice) {
+      Multi[i] = solution;
     } else {
-      Multi[3] = round(random(0, 99));
-      while (Multi[3] == solution || Multi[3] == Multi[0] || Multi[3] == Multi[1] || Multi[3] == Multi[2]) {
-        Multi[3] = round(random(0, 99));
-        print("box 3 rerunning");
-      }
+      let falseAnswer;
+      do {
+        falseAnswer = Math.abs(solution + round((random(-range, range))));
+      } while (Multi.includes(falseAnswer) || falseAnswer === solution);
+      Multi[i] = falseAnswer;
     }
+  }
   }
 
 
